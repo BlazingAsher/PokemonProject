@@ -191,8 +191,6 @@ public class PokemonArena {
 				System.out.println("Please enter a valid number!");
 				in.next();
 			}
-
-
 		}
 		System.out.printf("%s used %s!\n", playerPoke.getName(), playerPoke.getAttacks()[chosenMove].getName());
 
