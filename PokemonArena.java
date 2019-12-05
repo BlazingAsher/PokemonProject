@@ -248,7 +248,7 @@ public class PokemonArena {
     }
 
 	/**
-	 * Restores player HP and undisables them after the battle
+	 * Restores player HP, undisables them after the battle, and restores energy
 	 */
 	private static void updatePlayerAfterBattle(){
 		for(int i=0;i<goodPokemon.size();i++){ // Iterate through all player Pokemon
@@ -256,6 +256,9 @@ public class PokemonArena {
 				goodPokemon.get(i).addHP(20);
 			}
 			goodPokemon.get(i).undisable();
+
+			// Restore their energy to max
+			goodPokemon.get(i).addEnergy(goodPokemon.get(i).MAX_ENERGY);
 		}
 	}
 
@@ -348,9 +351,8 @@ public class PokemonArena {
 				delay(2);
 			}
 
-			// Add HP to alive player Pokemon and undisable them after the battle
+			// Add HP to alive player Pokemon, undisable them after the battle, restore energy
 			updatePlayerAfterBattle();
-
 			// Remove the bad Pokemon
 			badPokemon.remove(eneInd);
 		}

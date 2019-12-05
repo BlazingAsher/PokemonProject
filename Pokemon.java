@@ -18,8 +18,8 @@ public class Pokemon {
     
     
     private final Random random = new Random(); // Random object
-    private final int MAX_HP; // Max HP of the Pokemon, set in constructor
-    private final int MAX_ENERGY = 50; // Max energy of the Pokemon
+    public final int MAX_HP; // Max HP of the Pokemon, set in constructor
+    public final int MAX_ENERGY = 50; // Max energy of the Pokemon
     
     
     public Pokemon(String initString){
@@ -59,7 +59,7 @@ public class Pokemon {
      * @return the amount of energy the Pokemon now has
      */
     public int useEnergy(int useAmt){
-        this.energy = this.energy - useAmt;
+        this.energy = Math.max(0, this.energy - useAmt);
         return this.energy;
     }
 
