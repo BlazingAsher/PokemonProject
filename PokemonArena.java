@@ -21,7 +21,7 @@ public class PokemonArena {
     	Scanner inF = new Scanner(new BufferedReader(new FileReader("pokemon.txt")));
 		
 		int num = inF.nextInt();
-		inF.nextLine(); // Space
+		inF.nextLine(); // Space skip
 		for(int i=0;i<num;i++){
 		    badPokemon.add(new Pokemon(inF.nextLine()));
 		}
@@ -291,6 +291,7 @@ public class PokemonArena {
 									break;
 								}
 								else {
+									// Canceled, so display the menu again
 									continue;
 								}
 

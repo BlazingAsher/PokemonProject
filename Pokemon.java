@@ -5,25 +5,27 @@ import java.util.*;
  * Description: Contains fields about the Pokemon and methods to update such fields and perform actions onto other Pokemon
  */
 public class Pokemon {
-    private final String name;
-    private int hp;
+    private final String name; // Name of the Pokemon
+    private int hp; // HP of the Pokemon
     
-    private int energy = 50;
-    private final String type;
-    private final String resistance;
-    private final String weakness;
-    private final Attack[] attacks;
-    private boolean stunned = false;
-    private boolean disabled = false;
+    private int energy = 50; // Energy of the Pokemon
+    private final String type; // Type of the Pokemon
+    private final String resistance; // Resistance of the Pokemon
+    private final String weakness; // Weakness of the Pokemon
+    private final Attack[] attacks; // Attacks of the Pokemon
+    private boolean stunned = false; // Whether the Pokemon is stunned
+    private boolean disabled = false; // Whether the Pokemon is disabled
     
     
-    private final Random random = new Random();
-    private final int MAX_HP;
-    private final int MAX_ENERGY = 50;
+    private final Random random = new Random(); // Random object
+    private final int MAX_HP; // Max HP of the Pokemon, set in constructor
+    private final int MAX_ENERGY = 50; // Max energy of the Pokemon
     
     
     public Pokemon(String initString){
-        String[] pokeInfo = initString.split(",");
+        String[] pokeInfo = initString.split(","); // Split the CSV
+
+        // Set the values according the the given schema
         this.name = pokeInfo[0];
         this.hp = Integer.parseInt(pokeInfo[1]);
         this.MAX_HP = this.hp;
@@ -33,7 +35,8 @@ public class Pokemon {
         
         int numAttacks = Integer.parseInt(pokeInfo[5]);
         this.attacks = new Attack[numAttacks];
-        
+
+        // Keep reading for as long as there are attacks
         for(int i=0;i<numAttacks;i++){
             this.attacks[i] = new Attack(pokeInfo[6+4*i], Integer.parseInt(pokeInfo[6+4*i+1]), Integer.parseInt(pokeInfo[6+4*i+2]), pokeInfo[6+4*i+3]);
             LevelLogger.log(this.attacks[i]);
@@ -46,7 +49,7 @@ public class Pokemon {
      * @return the amount of energy the Pokemon now has
      */
     public int addEnergy(int addAmt) {
-        this.energy = Math.min(this.energy+addAmt, this.MAX_ENERGY);
+        this.energy = Math.min(this.energy+addAmt, this.MAX_ENERGY); // Do not add more than max
         return this.energy;
     }
 
@@ -82,7 +85,7 @@ public class Pokemon {
      * @return the amount of HP the Pokemon now has
      */
     public int addHP(int addAmt) {
-        this.hp = Math.min(this.MAX_HP, this.hp+addAmt);
+        this.hp = Math.min(this.MAX_HP, this.hp+addAmt); // Do not add more than max
         return this.hp;
     }
 
@@ -145,16 +148,16 @@ public class Pokemon {
      * @return the amount of HP the Pokemon now has
      */
     public int decHP(String oppType, int decAmt){
-        if(this.resistance.equals(oppType)){
+        if(this.resistance.equals(oppType)){ // Halve damage if it is resistant
             System.out.println("It's not very effective...");
             decAmt*=0.5;
         }
-        if(this.weakness.equals(oppType)){
+        if(this.weakness.equals(oppType)){ // Double damage if it is weak
             System.out.println("It's super effective!");
             decAmt*=2;
         }
-        this.hp-=decAmt;
-        if(this.hp <= 0){
+        this.hp-=decAmt; // Remove the HP
+        if(this.hp <= 0){ // Check if fainted
             System.out.printf("%s fainted!\n", this.name);
         }
         LevelLogger.log("Dec: "+decAmt+" Now HP: "+this.hp);
@@ -236,10 +239,11 @@ public class Pokemon {
      */
     public String toPrettyString(boolean playerDisplay, boolean showMoves){
         StringBuilder temp = new StringBuilder(String.format("%s (%d HP)", this.name, Math.max(0, this.hp)));
-        if(playerDisplay){
+        if(playerDisplay){ // Add energy if shown to player
             temp.append(String.format(" (%d Energy)", this.energy));
         }
-        
+
+        // Show status effects
         if(this.hp <= 0){
             temp.append(" - FNT");
         }
@@ -251,7 +255,8 @@ public class Pokemon {
         if(this.disabled){
             temp.append(" - Disabled");
         }
-        
+
+        // Show moves of Pokemon
         if(showMoves){
             temp.append("\n");
             for(Attack pokeAttack : this.attacks){

@@ -11,6 +11,7 @@ public class Utilities{
      * @return the index of the target in array (-1 if not found)
      */
     public static int indexOf(int[] array, int target){
+        // Iterates through array, checking if value at the index matches target
         for(int i=0;i<array.length;i++){
             if(array[i] == target){
                 return i;
