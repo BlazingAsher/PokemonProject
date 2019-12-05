@@ -166,7 +166,6 @@ public class PokemonArena {
 				System.out.printf("%d - %s\n", i+1, playerPoke.getAttacks()[i].toPrettyString());
 			}
 			System.out.printf("%d - %s\n", playerPoke.getAttacks().length+1, "Cancel");
-			
 			System.out.print("Please choose the move to fight with: ");
 
 			if(in.hasNextInt()){
@@ -195,13 +194,10 @@ public class PokemonArena {
 
 
 		}
-		
-		LevelLogger.log(playerPoke.getAttacks()[chosenMove]);
 		System.out.printf("%s used %s!\n", playerPoke.getName(), playerPoke.getAttacks()[chosenMove].getName());
 
 		// Perform the attack
 		playerPoke.attack(opponent, chosenMove);
-
 		return true;
     }
 
@@ -252,6 +248,18 @@ public class PokemonArena {
     }
 
 	/**
+	 * Restores player HP and undisables them after the battle
+	 */
+	private static void updatePlayerAfterBattle(){
+		for(int i=0;i<goodPokemon.size();i++){ // Iterate through all player Pokemon
+			if(goodPokemon.get(i).getHP() > 0){ // Add 20 HP to those who are still alive
+				goodPokemon.get(i).addHP(20);
+			}
+			goodPokemon.get(i).undisable();
+		}
+	}
+
+	/**
 	 * Runs the main game
 	 * @return whether the player won
 	 */
@@ -259,7 +267,6 @@ public class PokemonArena {
 		while(badPokemon.size() > 0){
 			int eneInd = random.nextInt(badPokemon.size()); // index of the enemy chosen
 			opponent = badPokemon.get(eneInd); // set opponent
-
 			System.out.printf("Foe %s appeared!\n", opponent.getName());
 
 			boolean playerTurn = random.nextBoolean(); // randomly choose who goes first
@@ -267,8 +274,7 @@ public class PokemonArena {
 
 			while(opponent.getHP() > 0){
 				if(completedMove && playerTurn){ // If we moved on a turn, and it is the player's turn, print some info
-					System.out.print("\n\n");
-					System.out.println("Foe: "+opponent.toPrettyString());
+					System.out.println("\n\nFoe: "+opponent.toPrettyString());
 					System.out.println("You: "+playerPoke.toPrettyString(true, false));
 					completedMove = !completedMove;
 				}
@@ -280,13 +286,11 @@ public class PokemonArena {
 					}
 					else {
 						System.out.println("Please choose your desired action: (A)ttack, (R)etreat, (P)ass");
-
 						// Ask the player what to do
 						switch(in.next().toUpperCase()){
 							case "A":
 								if(!playerAttack()){
-									// Canceled, so display the menu again
-									continue;
+									continue; // Canceled, so display the menu again
 								}
 								break;
 							case "R":
@@ -299,7 +303,6 @@ public class PokemonArena {
 									// Canceled, so display the menu again
 									continue;
 								}
-
 							case "P":
 								break;
 							default:
@@ -307,7 +310,6 @@ public class PokemonArena {
 								continue;
 						}
 					}
-
 					// Unstun the player after the turn
 					playerPoke.unstun();
 				}
@@ -325,7 +327,6 @@ public class PokemonArena {
 								return false; // Ran out of Pokemon, terminate game.
 							}
 							playerPoke = goodPokemon.get(playerPokeInd); // Set the new player pokemon
-
 							//Skip move when died
 							playerTurn = !playerTurn;
 						}
@@ -342,23 +343,16 @@ public class PokemonArena {
 
 				// We made it here, so a turn was completed
 				completedMove = true;
-
 				// Next turn
 				playerTurn = !playerTurn;
 				delay(2);
 			}
 
 			// Add HP to alive player Pokemon and undisable them after the battle
-			for(int i=0;i<goodPokemon.size();i++){
-				if(goodPokemon.get(i).getHP() > 0){
-					goodPokemon.get(i).addHP(20);
-				}
-				goodPokemon.get(i).undisable();
-			}
+			updatePlayerAfterBattle();
 
 			// Remove the bad Pokemon
 			badPokemon.remove(eneInd);
-
 		}
 		return true;
 	}
