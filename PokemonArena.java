@@ -7,12 +7,12 @@ import java.io.*;
  * Description: Handles main game execution and logic and serves as entry point to game
  */
 public class PokemonArena {
-    private static final ArrayList<Pokemon> badPokemon = new ArrayList<Pokemon>();
-    private static final ArrayList<Pokemon> goodPokemon = new ArrayList<Pokemon>();
-    private static final Random random = new Random();
-    private static final Scanner in = new Scanner(System.in);
-    private static Pokemon playerPoke;
-    private static Pokemon opponent;
+    private static final ArrayList<Pokemon> badPokemon = new ArrayList<Pokemon>(); // The ArrayList of bad Pokemon
+    private static final ArrayList<Pokemon> goodPokemon = new ArrayList<Pokemon>(); // The ArrayList of good Pokemon
+    private static final Random random = new Random(); // Random object
+    private static final Scanner in = new Scanner(System.in); // Main scanner
+    private static Pokemon playerPoke; // The current player Pokemon
+    private static Pokemon opponent; // The current enemy Pokemon
 
 	/**
 	 * Loads Pokemon into an ArrayList
@@ -127,6 +127,9 @@ public class PokemonArena {
 				else if(canCancel && chosenPokeInd == goodPokemon.size()){ // Player canceled
 					return -1;
 				}
+				else{
+					System.out.println("Invalid choice!");
+				}
 			}
 			else{
 				System.out.println("Please enter a valid number!");
@@ -173,11 +176,13 @@ public class PokemonArena {
 				}
 
 				// Check if out of range
-				if(chosenMove >= 0 && chosenMove < playerPoke.getAttacks().length && playerPoke.getEnergy() - playerPoke.getAttacks()[chosenMove].getEnergy() >= 0){
-					break;
-				}
-				else if(!(playerPoke.getEnergy() - playerPoke.getAttacks()[chosenMove].getEnergy() >= 0)){ // Check if player has enough energy
-					System.out.println("You do not have enough energy to perform that move!");
+				if(chosenMove >= 0 && chosenMove < playerPoke.getAttacks().length){
+					if(playerPoke.getEnergy() - playerPoke.getAttacks()[chosenMove].getEnergy() >= 0){
+						break;
+					}
+					else{ // Check if player has enough energy
+						System.out.println("You do not have enough energy to perform that move!");
+					}
 				}
 				else {
 					System.out.println("Invalid move, please try again!");
