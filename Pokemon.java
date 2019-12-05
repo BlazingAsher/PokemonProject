@@ -170,31 +170,36 @@ public class Pokemon {
      * @param attackID The ID of the attack to use
      */
     public void attack(Pokemon other, int attackID){
+        // Disallow if stunned
         if(this.stunned){
             return;
         }
+
+        // Get the chosen attack object
         Attack chosenAttack = this.attacks[attackID];
+
+        // Remove energy from Pokemon
         useEnergy(chosenAttack.getEnergy());
+
+        String modifier = chosenAttack.getModifier(); // Get the modifier
         
-        String modifier = chosenAttack.getModifier();
+        int damage = chosenAttack.getDamage(); // Get the damage of the attack
         
-        int damage = chosenAttack.getDamage();
-        
-        if(disabled){
+        if(disabled){ // Remove 10 damage if Pokemon is disabled
             damage = Math.max(0, damage-10);
         }
         
         switch(modifier) {
             case "stun":
                 LevelLogger.log("stun");
-                if(random.nextBoolean()){
+                if(random.nextBoolean()){ // Randomly choose whether to stun
                     System.out.printf("%s stunned %s!\n", this.name, other.getName());
                     other.stun();
                 }
                 break;
             case "wild card":
                 LevelLogger.log("wild card");
-                if(random.nextBoolean()){
+                if(random.nextBoolean()){ // Randomly choose whether to attack or not
                     LevelLogger.log("negate");
                     System.out.printf("%s missed!\n",this.name);
                     damage = 0;
@@ -202,13 +207,16 @@ public class Pokemon {
                 break;
             case "wild storm":
                 LevelLogger.log("wild storm");
-                int olddamage = damage;
-                damage = 0;
-                int i = 0;
-                while(random.nextBoolean()){
+                int olddamage = damage; // Store the amount of damage the move does (to be added)
+                damage = 0; // Base damage is 0
+                int i = 0; // Count how many times to attack
+                while(random.nextBoolean()){ // Randomly generate true/false, only keep going if it stays true
+                    // Add another set of damage
                     damage+=olddamage;
                     i++;
                 }
+
+                // Tell the user what happened
                 if(i == 0){
                     System.out.printf("%s missed!\n",this.name);
                 }
@@ -219,15 +227,18 @@ public class Pokemon {
             case "disable":
                 LevelLogger.log("disable");
                 System.out.printf("%s disabled %s! All attacks by %s will now do 10 HP less damage!\n", this.name, other.getName(), other.getName());
+                // Disable the enemy
                 other.disable();
                 break;
             case "recharge":
                 LevelLogger.log("recharge");
                 System.out.printf("%s recharged 20 energy!\n", this.name);
+                // Recharge 20
                 addEnergy(20);
                 break;
         }
 
+        // Actually attack the enemy
         other.decHP(this.type, damage);
     }
 
